@@ -43,4 +43,25 @@ if uploaded_file is not None:
             r"\bits\b.*\bit's\b|\bit's\b.*\bits\b": "its / it's 混同",
             r"\bteh\b": "誤字（teh → the）",
             r"\brecieve\b": "誤字（recieve → receive）",
-            r"\bseperate\b": "誤字（se
+            r"\bseperate\b": "誤字（seperate → separate）",
+            r"\boccured\b": "誤字（occured → occurred）",
+        }
+
+    # 検出関数
+    def find_error(text):
+        for pattern, comment in error_patterns.items():
+            if re.search(pattern, text, flags=re.IGNORECASE):
+                return pattern, comment
+        return None, None
+
+    df[["Matched Pattern", "Comment"]] = df["Text"].apply(lambda t: pd.Series(find_error(t)))
+    error_df = df[df["Matched Pattern"].notnull()].reset_index(drop=True)
+
+    st.subheader("🔍 検出された誤字・文法ミス")
+    st.dataframe(error_df)
+
+    csv = error_df.to_csv(index=False).encode("utf-8")
+    st.download_button("📥 誤字一覧をCSVでダウンロード", csv, "errors.csv", "text/csv")
+
+else:
+    st.info("まずは .txt ファイルをアップロードしてください。")
