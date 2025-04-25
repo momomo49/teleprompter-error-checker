@@ -45,6 +45,7 @@ if uploaded_file is not None:
             r"\brecieve\b": "誤字（recieve → receive）",
             r"\bseperate\b": "誤字（seperate → separate）",
             r"\boccured\b": "誤字（occured → occurred）",
+            r"\bsuprising\b": "誤字（suprising → surprising）"
         }
 
     # 検出関数
